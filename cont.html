@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Connection</title>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<style>
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+        --button-bg: #007BFF;
+        --button-color: #ffffff;
+    }
+
+    [data-theme="dark"] {
+        --bg-color: #1e1e1e;
+        --text-color: #ffffff;
+        --button-bg: #0056b3;
+        --button-color: #ffffff;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    form {
+        max-width: 400px;
+        margin: auto;
+        background: var(--bg-color);
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    form label {
+        display: block;
+        margin: 10px 0 5px;
+    }
+
+    form input {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    form button {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        background-color: var(--button-bg);
+        color: var(--button-color);
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    form button:hover {
+        background-color: #0056b3;
+    }
+
+    .toggle-theme-btn {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        background-color: var(--button-bg);
+        color: var(--button-color);
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .toggle-theme-btn:hover {
+        background-color: #0056b3;
+    }
+
+    a {
+        display: block;
+        margin-top: 15px;
+        text-align: center;
+        color: var(--button-bg);
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+<body>
+    <h1>Connexion avec Firebase</h1>
+    <form id="dataForm">
+        <label for="ide">Id:</label>
+        <input type="text" id="ide" name="idee" required>
+        
+        <label for="name">Nom:</label>
+        <input type="text" id="name" name="name" required>
+        
+        <label for="preno">Prénom:</label>
+        <input type="text" id="preno" name="preno" required>
+        
+        <label for="num">Numéro:</label>
+        <input type="text" id="num" name="num" required>
+        
+        <label for="pay">Pays:</label>
+        <input type="text" id="pay" name="pay" required>
+        
+        <label for="age">Âge:</label>
+        <input type="text" id="age" name="age" required>
+        
+        <label for="sexe">Sexe:</label>
+        <input type="text" id="sexe" name="sexe" required>
+        
+        <button type="submit" id="submit">Envoyer</button>
+    </form>
+    <a href="meteo.html">Météo</a>
+    <script type="module">
+         // Import the functions you need from the SDKs you need
+ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+ import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+
+ // Your web app's Firebase configuration
+ const firebaseConfig = {
+     apiKey: "AIzaSyAR4LG9H74fO2aapncp95HsJUXvdou_2u0",
+     authDomain: "projectar-3bea3.firebaseapp.com",
+     databaseURL: "https://projectar-3bea3-default-rtdb.firebaseio.com", 
+     projectId: "projectar-3bea3",
+     storageBucket: "projectar-3bea3.appspot.com",
+     messagingSenderId: "358076949945",
+     appId: "1:358076949945:web:627101107cdc3b87908268"
+ };
+
+ // Initialize Firebase
+ const app = initializeApp(firebaseConfig);
+ const db = getDatabase(app);
+
+ // Ajout du gestionnaire d'événement
+ document.getElementById("submit").addEventListener('click', function(e) {
+     e.preventDefault(); // Empêcher le rechargement de la page
+     console.log('Clic détecté');
+     set(ref(db, 'contact/' + document.getElementById("ide").value), {
+         id: document.getElementById("ide").value,
+         nom: document.getElementById("name").value,
+         prenom: document.getElementById("preno").value,
+         numero: document.getElementById("num").value,
+         pays: document.getElementById("pay").value,
+         age: document.getElementById("age").value,
+         sexe: document.getElementById("sexe").value
+     })
+     .then(() => {
+         alert("Données ajoutées avec succès !");
+     })
+     .catch((error) => {
+         console.error("Erreur lors de l'ajout des données : ", error);
+     });
+ });
+    </script>
+    <a href="https://api.whatsapp.com/send?phone=25779909070">WhatsApp</a>
+
+
+    <button id="checkout">Checkout</button>
+    <script>
+        var stripe = Stripe("pk_test_51QOCkQ2MjwRljZJHtLFI8vPiPVzq810xJmuiQfCxeIe7RNDDO9hMFSvMqKUv7LlR32uZtoi4h50WIQhp9J2gATN100QZST3osf");
+
+        document.getElementById("checkout").addEventListener("click", function() {
+            stripe.redirectToCheckout({
+                lineItems: [
+                    {
+                        price: "price_1QSx9h2MjwRljZJH0kLLZjxc",  // Remplacez par un ID de prix valide
+                        quantity: 1
+                    }
+                ],
+                mode: "subscription", 
+                successUrl: "https://www.google.com/",   // Mettez ici une URL de succès valide
+                cancelUrl: "https://www.twitter.com/"    // Mettez ici une URL de cancellation valide
+            }).then(function(result) {
+                if (result.error) {
+                    console.error(result.error.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
